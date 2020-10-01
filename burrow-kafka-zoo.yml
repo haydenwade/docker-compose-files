@@ -1,0 +1,42 @@
+# docker-compose -f burrow-kafka-zoo.yml down; docker-compose -f burrow-kafka-zoo.yml up
+version: "2"
+services:
+  burrow:
+    image: solsson/burrow
+    volumes:
+      - ${PWD}/burrow:/etc/burrow/
+      - ${PWD}/tmp:/var/tmp/burrow
+    ports:
+      - 8000:8000
+    depends_on:
+      - zookeeper
+      - kafka
+    restart: always
+
+  burrow-exporter:
+    image: aluladevops/alula-burrow-exporter:v1.0.0
+    depends_on:
+      - burrow
+    environment:
+      BURROW_URL: http://burrow:8000
+    ports:
+      - 8800:3000
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - 2181:2181
+
+  kafka:
+    image: wurstmeister/kafka
+    hostname: kafka
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181/local
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_CREATE_TOPICS: "test-topic:2:1,test-topic2:1:1,test-topic3:1:1"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+  
+

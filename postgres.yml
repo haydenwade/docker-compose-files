@@ -1,0 +1,12 @@
+# docker-compose -f postgres.yml down; docker-compose -f postgres.yml up
+version: "2"
+services:
+  postgres:
+    image: postgres:13-alpine
+    ports:
+      - "32768:5432"
+    restart: always
+    environment:
+       POSTGRES_PASSWORD: test123
+       POSTGRES_USER: admin1
+       POSTGRES_DB: postgres
