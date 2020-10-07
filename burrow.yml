@@ -1,0 +1,20 @@
+# docker-compose -f burrow.yml down; docker-compose -f burrow.yml up
+version: "2"
+services:
+  burrow:
+    image: solsson/burrow
+    volumes:
+      - ${PWD}/burrow:/etc/burrow/
+      - ${PWD}/tmp:/var/tmp/burrow
+    ports:
+      - 8000:8000
+
+  burrow-exporter:
+    image: aluladevops/alula-burrow-exporter:v1.0.0
+    depends_on:
+      - burrow
+    environment:
+      BURROW_URL: http://burrow:8000
+    ports:
+      - 8800:3000
+
