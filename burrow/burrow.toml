@@ -6,8 +6,8 @@ root-path="/burrow"
 [cluster.local]
 class-name="kafka"
 servers=[ "kafka:9092" ]
-topic-refresh=60
-offset-refresh=30
+topic-refresh=10
+offset-refresh=10
 
 [consumer.local]
 class-name="kafka"
